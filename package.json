@@ -1,0 +1,40 @@
+{
+  "name": "basic-jwt-api",
+  "version": "0.0.1",
+  "description": "Basic JSON Web Token (JWT) based user authentication, authorization and session management micro services",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wittydata/basic-jwt-api.git"
+  },
+  "keywords": [
+    "authentication",
+    "authorization",
+    "session",
+    "session management",
+    "jwt",
+    "json web token",
+    "koa",
+    "mongoose",
+    "mongodb"
+  ],
+  "author": "Witty Data",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@koa/cors": "^2.2.1",
+    "jsonwebtoken": "^8.3.0",
+    "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "mongoose": "5.1.6",
+    "pino": "^4.17.3",
+    "randomatic": "^3.0.0",
+    "uid-safe": "^2.1.5"
+  },
+  "scripts": {
+    "server": "NODE_ENV=production node server",
+    "server-dev": "nodemon server",
+    "server-seed": "node server/config/seed"
+  }
+}
