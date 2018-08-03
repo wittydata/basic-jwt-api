@@ -49,15 +49,13 @@ router
 
         const permissions = await Permission.find({ grants: role }, { action: 1 })
         const token = jwt.sign({ _id }, tokenKey, { expiresIn: tokenExpiry })
-        await Promise.all([
-          Session.create({
-            expiredAt: new Date(Date.now() + sessionExpiry * 1000),
-            token,
-            userId: _id,
-            userIp: ip
-          }),
-          User.update({ _id }, { $set: { rememberMe } })
-        ])
+        await Session.create({
+          expiredAt: new Date(Date.now() + sessionExpiry * 1000),
+          rememberMe,
+          token,
+          userId: _id,
+          userIp: ip
+        })
         ctx.status = 200
         ctx.body = {
           permissions: permissions.map(({ action }) => action),
@@ -95,7 +93,6 @@ router
       const salt = uid.sync(24)
       const result = await User.update({ _id }, {
         $set: {
-          rememberMe: false,
           resetPassword: true,
           password: User.encryptPassword(password, salt),
           salt

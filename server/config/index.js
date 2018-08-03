@@ -11,7 +11,9 @@ const logLevel = isDev ? 'trace' : 'info'
 const secretKey = isDev ? 'my.domain' : uid.sync(24)
 const session = {
   // Session expires in 1 hour
-  expiry: 60 * 60
+  expiry: 60 * 60,
+  // Remember Me expires in 1 day
+  rememberMeExpiry: 60 * 60 * 24
 }
 const token = {
   // Token expires in 12 minutes

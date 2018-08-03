@@ -43,11 +43,6 @@ const schema = new Schema({
     default: true,
     index: true
   },
-  rememberMe: {
-    type: Boolean,
-    default: false,
-    index: true
-  },
   resetPassword: {
     type: Boolean,
     default: true,
