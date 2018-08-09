@@ -2,13 +2,14 @@ const pino = require('pino')
 
 const { appName, logLevel } = require('./index')
 
-const isDev = process.env.NODE_ENV !== 'production'
-const options = { name: appName, level: logLevel }
-let pretty
-
-if (isDev) {
-  pretty = pino.pretty()
-  pretty.pipe(process.stdout)
+const isDev = process.env.NODE_ENV === 'development'
+const options = {
+  level: logLevel,
+  name: appName
 }
 
-module.exports = pino(options, pretty)
+if (isDev) {
+  options.prettyPrint = { levelFirst: true }
+}
+
+module.exports = pino(options)

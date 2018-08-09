@@ -11,7 +11,14 @@ const User = require('../models/user')
 const pino = log.child({ path: 'config/seed' })
 
 mongoose.Promise = global.Promise
-mongoose.connect(dbConnString, { config: { autoIndex: false } })
+mongoose.connect(dbConnString, {
+  config: {
+    autoIndex: false,
+    reconnectTries: 60 * 60 * 24,
+    reconnectInterval: 1000
+  },
+  useNewUrlParser: true
+})
 mongoose.connection
   .on('connected', async () => {
     pino.info("Let's seed the database with default values")

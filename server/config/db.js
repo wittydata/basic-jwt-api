@@ -11,7 +11,8 @@ mongoose.connect(dbConnString, {
     autoIndex: false,
     reconnectTries: 60 * 60 * 24,
     reconnectInterval: 1000
-  }
+  },
+  useNewUrlParser: true
 })
 mongoose.connection
   .on('connected', () => {

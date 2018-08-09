@@ -20,21 +20,24 @@
   "author": "Witty Data",
   "license": "MIT",
   "private": true,
+  "devDependencies": {
+    "pino-pretty": "^2.0.1"
+  },
   "dependencies": {
-    "@koa/cors": "^2.2.1",
+    "@koa/cors": "^2.2.2",
     "jsonwebtoken": "^8.3.0",
-    "koa": "^2.5.1",
+    "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
-    "mongoose": "5.1.6",
-    "pino": "^4.17.3",
-    "randomatic": "^3.0.0",
+    "mongoose": "5.2.7",
+    "pino": "^5.0.1",
+    "randomatic": "^3.1.0",
     "uid-safe": "^2.1.5"
   },
   "scripts": {
-    "server": "NODE_ENV=production node server",
-    "server-dev": "nodemon server",
+    "server": "node server",
+    "server-dev": "NODE_ENV=development nodemon server",
     "server-seed": "node server/config/seed"
   }
 }

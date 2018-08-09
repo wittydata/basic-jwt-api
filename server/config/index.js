@@ -1,7 +1,7 @@
 const uid = require('uid-safe')
 
 const { npm_package_name: appName, NODE_ENV, PORT } = process.env
-const isDev = NODE_ENV !== 'production'
+const isDev = NODE_ENV === 'development'
 const port = parseInt(PORT, 10) || 3000
 const dbConnString = isDev
   ? 'mongodb://localhost:27017/basic-jwt-dev'
