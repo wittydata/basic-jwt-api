@@ -57,7 +57,7 @@ router
       const { id } = params
       ctx.body = {}
 
-      if (await User.count({ _id: id }) > 0) {
+      if (await User.countDocuments({ _id: id }) > 0) {
         ctx.body = await User.findById(id, { name: 1, email: 1, role: 1, active: 1 })
       }
     }
@@ -73,7 +73,7 @@ router
       const { id } = params
       ctx.body = {}
 
-      if (await User.count({ _id: id }) > 0) {
+      if (await User.countDocuments({ _id: id }) > 0) {
         const { body } = request
         const user = new User(body)
         const result = user.validateSync()
@@ -114,7 +114,7 @@ router
       const { id } = params
       ctx.body = {}
 
-      if (await User.count({ _id: id }) > 0) {
+      if (await User.countDocuments({ _id: id }) > 0) {
         const result = await User.findByIdAndRemove(id)
         ctx.status = 400
 

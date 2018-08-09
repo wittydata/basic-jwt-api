@@ -52,7 +52,7 @@ router
       const { id } = params
       ctx.body = {}
 
-      if (await Note.count({ _id: id }) > 0) {
+      if (await Note.countDocuments({ _id: id }) > 0) {
         ctx.body = await Note.findById(id)
       }
     }
@@ -68,7 +68,7 @@ router
       const { id } = params
       ctx.body = {}
 
-      if (await Note.count({ _id: id }) > 0) {
+      if (await Note.countDocuments({ _id: id }) > 0) {
         const { body } = request
         const note = new Note(body)
         const result = note.validateSync()
@@ -102,7 +102,7 @@ router
       const { id } = params
       ctx.body = {}
 
-      if (await Note.count({ _id: id }) > 0) {
+      if (await Note.countDocuments({ _id: id }) > 0) {
         const result = await Note.findByIdAndRemove(id)
         ctx.status = 400
 
