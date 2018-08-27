@@ -8,6 +8,11 @@ const schema = new Schema({
     default: () => new Date(),
     index: true
   },
+  rememberMe: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
   token: {
     type: String,
     required: [true, 'Token is required'],
