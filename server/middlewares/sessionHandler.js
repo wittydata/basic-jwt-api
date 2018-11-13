@@ -16,9 +16,9 @@ function SessionHandler () {
 
     // Remove all outdated sessions
     let expiredAt = new Date(Date.now() - sessionExpiryInMillis)
-    await Session.deleteMany({ expiredAt: { $lte: expiredAt }, rememberMe: false })
+    Session.deleteMany({ expiredAt: { $lte: expiredAt }, rememberMe: false }).exec()
     expiredAt = new Date(Date.now() - rememberMeExpiryInMillis)
-    await Session.deleteMany({ expiredAt: { $lte: expiredAt }, rememberMe: true })
+    Session.deleteMany({ expiredAt: { $lte: expiredAt }, rememberMe: true }).exec()
 
     // Access to private API or contents
     if (url.startsWith('/private')) {
@@ -47,14 +47,14 @@ function SessionHandler () {
                   try {
                     const permissions = await Permission.find({ grants: role }, { action: 1 })
                     jwt.verify(token, tokenKey)
-                    ctx.state.user = user.toJSON()
                     ctx.state.permissions = permissions.map(({ action }) => action)
+                    ctx.state.user = user.toJSON()
                     return next()
                   } catch (err) {
                     if (err.name === 'TokenExpiredError') {
                       if (rememberMe && sessionExpired) {
                         // Extend session expiry
-                        await Session.update({ _id }, { expiredAt: new Date(Date.now() + sessionExpiry * 1000) })
+                        Session.updateOne({ _id }, { expiredAt: new Date(Date.now() + sessionExpiry * 1000) }).exec()
                       }
 
                       try {
@@ -66,7 +66,7 @@ function SessionHandler () {
                       } catch (err) {
                         if (err.name === 'TokenExpiredError') {
                           const newToken = jwt.sign({ _id: userId }, tokenKey, { expiresIn: tokenExpiry })
-                          await Session.update({ _id }, { token: newToken, lastToken: token, updatedAt: new Date() })
+                          Session.updateOne({ _id }, { token: newToken, lastToken: token, updatedAt: new Date() }).exec()
                           // Refresh token
                           ctx.status = 401
                           ctx.body = { tokenRefreshed: true, token: newToken }
@@ -78,6 +78,7 @@ function SessionHandler () {
                 }
 
                 // Session or token expired
+                Session.deleteOne({ $or: [{ token }, { lastToken: token }] }).exec()
                 ctx.status = 401
                 ctx.body = { tokenExpired: true }
                 return
