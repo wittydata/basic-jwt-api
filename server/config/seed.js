@@ -9,6 +9,10 @@ const Role = require('../models/role')
 const User = require('../models/user')
 
 const pino = log.child({ path: 'config/seed' })
+const Roles = {
+  ADMIN: 'admin',
+  USER: 'user'
+}
 
 mongoose.Promise = global.Promise
 mongoose.connect(dbConnString, {
@@ -27,16 +31,24 @@ mongoose.connection
       createPermissions(),
       createUsers()
     ])
+    mongoose.connection.close()
   })
   .on('error', (err) => {
     pino.error('Unable to seed database due to database error', err)
+    mongoose.connection.close()
   })
 
 // Insert default roles
 async function createRoles () {
   const roles = [
-    { name: 'Admin' },
-    { name: 'User' }
+    {
+      name: Roles.ADMIN,
+      sequence: 1
+    },
+    {
+      name: Roles.USER,
+      sequence: 2
+    }
   ]
   return Role.insertMany(roles, (err, docs) => {
     if (err) {
@@ -55,70 +67,70 @@ async function createPermissions () {
       action: 'listNotes',
       name: 'List Notes',
       description: 'Ability to list all notes',
-      grants: ['Admin', 'User']
+      grants: Object.values(Roles)
     },
     {
       module: PermissionModules.NOTES,
       action: 'createNote',
       name: 'Add Note',
       description: 'Ability to add a new note',
-      grants: ['Admin', 'User']
+      grants: Object.values(Roles)
     },
     {
       module: PermissionModules.NOTES,
       action: 'readNote',
       name: 'View Note',
       description: 'Ability to view an existing note',
-      grants: ['Admin', 'User']
+      grants: Object.values(Roles)
     },
     {
       module: PermissionModules.NOTES,
       action: 'updateNote',
       name: 'Update Note',
       description: 'Ability to update an existing note',
-      grants: ['Admin', 'User']
+      grants: Object.values(Roles)
     },
     {
       module: PermissionModules.NOTES,
       action: 'deleteNote',
       name: 'Remove Note',
       description: 'Ability to remove an existing note',
-      grants: ['Admin', 'User']
+      grants: Object.values(Roles)
     },
     {
       module: PermissionModules.USERS,
       action: 'listUsers',
       name: 'List Users',
       description: 'Ability to list all users',
-      grants: ['Admin']
+      grants: [Roles.ADMIN]
     },
     {
       module: PermissionModules.USERS,
       action: 'createUser',
       name: 'Add User',
       description: 'Ability to add a new user',
-      grants: ['Admin']
+      grants: [Roles.ADMIN]
     },
     {
       module: PermissionModules.USERS,
       action: 'readUser',
       name: 'View Note',
       description: 'Ability to view an existing user',
-      grants: ['Admin']
+      grants: [Roles.ADMIN]
     },
     {
       module: PermissionModules.USERS,
       action: 'updateUser',
       name: 'Update User',
       description: 'Ability to update and existing user',
-      grants: ['Admin']
+      grants: [Roles.ADMIN]
     },
     {
       module: PermissionModules.USERS,
       action: 'deleteUser',
       name: 'Remove User',
       description: 'Ability to remove an existing user',
-      grants: ['Admin']
+      grants: [Roles.ADMIN]
     }
   ]
   return Permission.insertMany(permissions, (err, docs) => {
@@ -132,24 +144,26 @@ async function createPermissions () {
 
 // Insert default users
 async function createUsers () {
+  const users = []
   const password = 'Test1234'
-  const salt = uid.sync(24)
-  const users = [
-    {
-      name: 'Admin User',
-      email: 'admin@email.com',
-      password: User.encryptPassword(password, salt),
-      salt,
-      role: 'Admin'
-    },
-    {
-      name: 'Normal User',
-      email: 'user@email.com',
-      password: User.encryptPassword(password, salt),
-      salt,
-      role: 'User'
-    }
-  ]
+  let salt = uid.sync(24)
+  let user = {
+    name: 'Admin User',
+    email: 'admin@email.com',
+    password: User.encryptPassword(password, salt),
+    salt,
+    role: Roles.ADMIN
+  }
+  users.push(user)
+  salt = uid.sync(24)
+  user = {
+    name: 'Normal User',
+    email: 'user@email.com',
+    password: User.encryptPassword(password, salt),
+    salt,
+    role: Roles.USER
+  }
+  users.push(user)
   return User.insertMany(users, (err, docs) => {
     if (err) {
       pino.error(err)

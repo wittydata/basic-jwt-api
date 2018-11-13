@@ -16,8 +16,8 @@ const session = {
   rememberMeExpiry: 60 * 60 * 24
 }
 const token = {
-  // Token expires in 12 minutes
-  expiry: 60 * 12,
+  // Token expires in 20 minutes
+  expiry: 60 * 20,
   key: secretKey
 }
 
