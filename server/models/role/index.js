@@ -12,9 +12,9 @@ const schema = new Schema({
     index: true,
     unique: true
   },
-  active: {
-    type: Boolean,
-    default: true,
+  sequence: {
+    type: Number,
+    default: Number.MAX_SAFE_INTEGER,
     index: true
   }
 })
