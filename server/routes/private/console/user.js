@@ -15,7 +15,7 @@ router
 
     if (auth.canPerform('listUsers', permissions)) {
       ctx.status = 200
-      ctx.body = await User.find({}, { name: 1, email: 1, role: 1, active: 1 }).sort({ role: 1, name: 1, email: 1 })
+      ctx.body = { list: await User.find({}, { name: 1, email: 1, role: 1, active: 1 }).sort({ name: 1, email: 1, role: 1 }) }
     }
   })
   .post('/', async (ctx, next) => {
@@ -58,7 +58,7 @@ router
       ctx.body = {}
 
       if (await User.countDocuments({ _id: id }) > 0) {
-        ctx.body = await User.findById(id, { name: 1, email: 1, role: 1, active: 1 })
+        ctx.body = { item: await User.findById(id, { name: 1, email: 1, role: 1, active: 1 }) }
       }
     }
   })
@@ -84,8 +84,6 @@ router
           ctx.body = { message }
         } else {
           const { password } = body
-
-          console.log(111, password)
 
           if (password) {
             const salt = uid.sync(24)
@@ -115,7 +113,7 @@ router
       ctx.body = {}
 
       if (await User.countDocuments({ _id: id }) > 0) {
-        const result = await User.findByIdAndRemove(id)
+        const result = await User.findByIdAndDelete(id)
         ctx.status = 400
 
         if (result) {

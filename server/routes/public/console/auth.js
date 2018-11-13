@@ -70,7 +70,7 @@ router
     const { request } = ctx
     const { body } = request
     const { token } = body
-    await Session.remove({ token: `${token}` })
+    await Session.deleteOne({ token: `${token}` })
     ctx.body = {}
   })
   .post('/reset-password', async (ctx, next) => {
@@ -88,8 +88,7 @@ router
     if (active === true) {
       const { _id, email } = user
 
-      // const password = User.generatePassword()
-      const password = 'Test1234'
+      const password = User.generatePassword()
       const salt = uid.sync(24)
       const result = await User.update({ _id }, {
         $set: {

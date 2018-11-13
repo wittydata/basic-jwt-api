@@ -13,7 +13,8 @@ router
     ctx.body = { unauthorized: true }
 
     if (auth.canPerform('listNotes', permissions)) {
-      ctx.body = await Note.find().sort({ updatedAt: -1, createdAt: -1, title: 1 })
+      ctx.status = 200
+      ctx.body = { list: await Note.find().sort({ updatedAt: -1, createdAt: -1, title: 1 }) }
     }
   })
   .post('/', async (ctx, next) => {
@@ -53,7 +54,7 @@ router
       ctx.body = {}
 
       if (await Note.countDocuments({ _id: id }) > 0) {
-        ctx.body = await Note.findById(id)
+        ctx.body = { item: await Note.findById(id) }
       }
     }
   })
@@ -103,7 +104,7 @@ router
       ctx.body = {}
 
       if (await Note.countDocuments({ _id: id }) > 0) {
-        const result = await Note.findByIdAndRemove(id)
+        const result = await Note.findByIdAndDelete(id)
         ctx.status = 400
 
         if (result) {

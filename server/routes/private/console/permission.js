@@ -10,7 +10,7 @@ router
     const { user } = state
     const { role } = user
     const permissions = await Permission.find({ grants: role }, { action: 1 })
-    ctx.body = permissions.map(({ action }) => action)
+    ctx.body = { list: permissions.map(({ action }) => action) }
   })
 
 module.exports = router

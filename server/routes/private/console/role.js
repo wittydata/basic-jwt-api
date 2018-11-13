@@ -16,9 +16,8 @@ router
       const { params } = ctx
       const { text } = params
       const criteria = typeof text === 'string' ? { name: { $regex: text, $options: 'i' } } : {}
-      criteria.active = true
       ctx.status = 200
-      ctx.body = await Role.find(criteria, { name: 1 }).sort({ name: 1 })
+      ctx.body = await Role.find(criteria, { name: 1 }).sort({ sequence: 1 })
     }
   })
 
