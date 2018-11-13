@@ -1,6 +1,6 @@
 {
   "name": "basic-jwt-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic JSON Web Token (JWT) based user authentication, authorization and session management micro services",
   "repository": {
     "type": "git",
@@ -21,18 +21,18 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "pino-pretty": "^2.0.1"
+    "pino-pretty": "^2.2.3"
   },
   "dependencies": {
     "@koa/cors": "^2.2.2",
     "jsonwebtoken": "^8.3.0",
-    "koa": "^2.5.2",
+    "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
-    "mongoose": "5.2.7",
-    "pino": "^5.0.1",
-    "randomatic": "^3.1.0",
+    "mongoose": "5.3.11",
+    "pino": "^5.8.1",
+    "randomatic": "^3.1.1",
     "uid-safe": "^2.1.5"
   },
   "scripts": {
